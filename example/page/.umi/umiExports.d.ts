@@ -1,1 +1,0 @@
-export { useModel } from '/Users/troy/Desktop/my-npm/umi-plugin-model/example/page/.umi/model/useModel';
