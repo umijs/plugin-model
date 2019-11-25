@@ -2,7 +2,8 @@
 /yarn.lock
 /package-lock.json
 /example/dist
-/example/node_modules
-/example/src/pages/.umi
-/example/src/pages/.umi-production
+
 /lib
+.umi
+.umi-production
+node_modules

@@ -17,8 +17,8 @@
     "experimentalDecorators": true,
     "strict": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@tmp/*": ["./src/pages/.umi/*"]
+      "@/*": ["./*"],
+      "@tmp/*": ["./page/.umi/*"]
     }
   },
   "exclude": [

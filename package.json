@@ -20,7 +20,6 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "dev": "PAGES_PATH='example' umi dev",
     "build": "father-build --cjs babel",
     "test": "umi-test",
     "prepublishOnly": "npm run build && np --no-cleanup --yolo --no-publish"
