@@ -1,5 +1,5 @@
 import React from 'react';
-import { useModel } from 'umi';
+import { useModel, Models } from 'umi';
 
 export default () => {
   const { counter, increment, decrement } = useModel('counter');

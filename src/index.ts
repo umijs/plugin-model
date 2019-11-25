@@ -1,6 +1,7 @@
 import chokidar from 'chokidar';
 import rimraf from 'rimraf';
 import { join, extname, isAbsolute } from "path";
+import { IApi } from 'umi-types';
 import { genImports, genModels } from './utils';
 
 // 监听器
@@ -20,7 +21,7 @@ export const removeModel = (absPath: string, namespace?: string) => {
   watcher.unwatch(absPath);
 }
 
-export default (api) => {
+export default (api: IApi) => {
   const { cwd } = api;
 
   // 修改 rootContainer
