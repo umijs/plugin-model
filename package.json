@@ -1,18 +1,18 @@
 {
-  "name": "umi-plugin-model",
+  "name": "@umijs/plugin-model",
   "version": "0.0.1",
   "description": "Generate global models",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/umijs/umi-plugin-model"
+    "url": "https://github.com/umijs/plugin-model"
   },
-  "homepage": "https://github.com/umijs/umi-plugin-model",
+  "homepage": "https://github.com/umijs/plugin-model",
   "authors": [
     "Troy Li <a@tianyi.li>"
   ],
   "bugs": {
-    "url": "https://github.com/umijs/umi-plugin-model/issues"
+    "url": "https://github.com/umijs/plugin-model/issues"
   },
   "peerDependencies": {
     "umi": "2.x",
