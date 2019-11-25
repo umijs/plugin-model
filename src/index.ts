@@ -38,7 +38,7 @@ export default (api: IApi) => {
 
     const models = `{${sortedModels.map(ele => ele).join(', ')}}`
 
-    api.writeTmpFile('model/Provider.tsx', `import React from 'react';
+    api.writeTmpFile('model/provider.tsx', `import React from 'react';
 ${imports}
 import Dispatcher from '${join(__dirname, 'helpers', 'dispatcher')}';
 import Executor from '${join(__dirname, 'helpers', 'executor')}';
@@ -80,7 +80,7 @@ export default ({ children }: { children: React.ReactNode }) => {
     const file = `
 import { useState, useEffect, useContext } from 'react';
 import { UmiContext } from '${join(__dirname, 'helpers', 'constant')}';
-import { Model } from './Provider';
+import { Model } from './provider';
 
 export const useModel = <T extends keyof Model<T>>(namespace: T) : Model<T>[T] => {
   const dispatcher = useContext<any>(UmiContext);
@@ -125,7 +125,7 @@ export const useModel = <T extends keyof Model<T>>(namespace: T) : Model<T>[T] =
     writeProvider(files);
   })
 
-  const exportContent = `export { Models } from '${join(api.paths.absTmpDirPath, 'model', 'Provider')}';
+  const exportContent = `export { Models } from '${join(api.paths.absTmpDirPath, 'model', 'provider')}';
 export { useModel } from '${join(api.paths.absTmpDirPath, 'model', 'useModel')}';`;
 
   // 写 ts 类型，因为 Models 是纯 TS 类型，不能用 addUmiExports 导出，否则在 js 文件中会报错
