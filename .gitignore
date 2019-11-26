@@ -2,7 +2,7 @@
 /yarn.lock
 /package-lock.json
 /example/dist
-
+/test/fixtures/*/.umi
 /lib
 .umi
 .umi-production
