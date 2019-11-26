@@ -15,11 +15,7 @@
     "noUnusedLocals": true,
     "allowJs": true,
     "experimentalDecorators": true,
-    "strict": true,
-    "paths": {
-      "@/*": ["./src/*"],
-      "@tmp/*": ["./src/page/.umi/*"]
-    }
+    "strict": true
   },
   "exclude": [
     "node_modules",

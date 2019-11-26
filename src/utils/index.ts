@@ -44,7 +44,7 @@ export const genModels = (imports: string[]) => {
   const contents = imports.map(absPath => ({namespace: getName(absPath), content: readFileSync(absPath).toString()}));
 
   const checkDuplicates = (list: string[]) => {
-    return new Set(list).size !== list.length 
+    return new Set(list).size !== list.length;
   }
 
   const models = sort(contents.map(ele => {
@@ -70,7 +70,7 @@ export const genModels = (imports: string[]) => {
     return { namespace: ele.namespace, use };
   }));
 
-  if(checkDuplicates(contents.map(ele => ele.namespace))) {
+  if (checkDuplicates(contents.map(ele => ele.namespace))) {
     throw Error('umi: models 中包含重复的 namespace！')
   }
 
