@@ -1,10 +1,10 @@
 import React from 'react';
-import { useModel } from './.umi/umi';
+import { useModel } from './.umi/useModel';
 
 export default () => {
   const { counter, increment, decrement } = useModel('counter');
   return (<>
-    {counter}
+    <h2 data-testid="count">{counter}</h2>
     <button onClick={increment}>add</button>
     <button onClick={decrement}>minus</button>
   </>);

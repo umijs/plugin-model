@@ -4,6 +4,7 @@
 /example/dist
 /test/fixtures/*/.umi
 /lib
+/coverage
 .umi
 .umi-production
 node_modules
