@@ -1,7 +1,7 @@
 {
   "name": "@umijs/plugin-model",
   "version": "0.0.1",
-  "description": "Generate global models",
+  "description": "Data flow solution based on hooks and umi plugin.",
   "license": "MIT",
   "repository": {
     "type": "git",

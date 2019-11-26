@@ -6,7 +6,7 @@
 [![GitHub Actions status](https://github.com/umijs/plugin-model/workflows/Node%20CI/badge.svg)](https://github.com/umijs/plugin-model)
 [![NPM downloads](http://img.shields.io/npm/dm/@umijs/plugin-model.svg?style=flat)](https://npmjs.org/package/@umijs/plugin-model)
 
-Generate global models.
+Data flow solution based on hooks and umi plugin.
 
 ## Install
 
