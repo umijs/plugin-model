@@ -13,8 +13,11 @@ export default (api: IApi) => {
 
   api.onGenerateFiles(() => {
     try {
+      const additionalModels = api.applyPlugins('addExtraModels', {
+        initialValue: [],
+      });
       // Write models/provider.tsx
-      api.writeTmpFile(`${DIR_NAME_IN_TMP}/Provider.tsx`, getProviderContent(modelsPath));
+      api.writeTmpFile(`${DIR_NAME_IN_TMP}/Provider.tsx`, getProviderContent(modelsPath, additionalModels));
       // Write models/useModel.tsx
       api.writeTmpFile(`${DIR_NAME_IN_TMP}/useModel.tsx`, getUserModelContent());
     } catch(e) {

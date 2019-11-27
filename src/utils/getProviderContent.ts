@@ -1,13 +1,14 @@
-import {join} from 'path';
+import { join } from 'path';
 import globby from 'globby';
-import { genImports, genModels } from './index';
+import { EOL } from 'os';
+import { genImports, genModels, genExtraModels, ModelItem } from './index';
 
 function getFiles(cwd: string) {
   return globby.sync('./**/*.{ts,tsx,js,jsx}', {
     cwd
   })
     .filter(
-      file =>
+      (file: string) =>
         !file.endsWith('.d.ts') &&
         !file.endsWith('.test.js') &&
         !file.endsWith('.test.jsx') &&
@@ -18,23 +19,36 @@ function getFiles(cwd: string) {
 
 function getModels(files: string[]) {
   const sortedModels: string[] = genModels(files);
-  return `{${sortedModels.map(ele => ele).join(', ')}}`;
+  return sortedModels.map(ele => ele).join(', ');
 }
 
-export default function (modelsDir: string) {
+function getExtraModels(models: ModelItem[] = []){
+  const extraModels = genExtraModels(models);
+  return extraModels.map(ele => `'${ele.namespace}': ${ele.importName}`).join(', ');
+}
+
+function getExtraImports(models: ModelItem[] = []){
+  const extraModels = genExtraModels(models);
+  return extraModels.map(ele => `import ${ele.importName} from '${ele.importPath}';`).join(EOL);
+}
+
+export default function (modelsDir: string, extra: ModelItem[] = []) {
   const files = getFiles(modelsDir).map(file => {
     return join(modelsDir, file);
   });
   const imports = genImports(files);
   const models = getModels(files);
+  const extraModels = getExtraModels(extra);
+  const extraImports = getExtraImports(extra);
 
   return `import React from 'react';
+${extraImports}
 ${imports}
 import Dispatcher from '${join(__dirname, '..', 'helpers', 'dispatcher')}';
 import Executor from '${join(__dirname, '..', 'helpers', 'executor')}';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 
-export const models = ${models};
+export const models = { ${extraModels ? `${extraModels}, ` : ''} ${models} };
 
 export type Model<T extends keyof typeof models> = {
   [key in keyof typeof models]: ReturnType<typeof models[T]>;

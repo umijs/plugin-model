@@ -27,6 +27,28 @@ export default {
 }
 ```
 
+register models in other plugins,
+
+```js
+// use custom namespace
+api.register('addExtraModels', () => [
+  {
+    absPath: join(paths.absTmpDirPath, 'init', 'user.tsx'),
+    namespace: '@@user',
+  },
+  {
+    absPath: join(paths.absTmpDirPath, 'init', 'access.tsx'),
+    namespace: '@@access',
+  },
+])
+
+// use default namespace
+api.register('addExtraModels', () => [
+  join(paths.absTmpDirPath, 'init', 'a.tsx')]),
+  join(paths.absTmpDirPath, 'init', 'b.tsx')])
+])
+```
+
 ## Options
 
 ## LICENSE
