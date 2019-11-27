@@ -13,7 +13,7 @@ export default (api: IApi) => {
 
   api.onGenerateFiles(() => {
     try {
-      const additionalModels = api.applyPlugins('addAdditionalModel', {
+      const additionalModels = api.applyPlugins('addExtraModels', {
         initialValue: [],
       });
       // Write models/provider.tsx

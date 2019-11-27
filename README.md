@@ -31,7 +31,7 @@ register models in other plugins,
 
 ```js
 // use custom namespace
-api.register('addAdditionalModel', () => [
+api.register('addExtraModels', () => [
   {
     absPath: join(paths.absTmpDirPath, 'init', 'user.tsx'),
     namespace: '@@user',
@@ -43,9 +43,10 @@ api.register('addAdditionalModel', () => [
 ])
 
 // use default namespace
-api.register('addAdditionalModel', () => [
+api.register('addExtraModels', () => [
   join(paths.absTmpDirPath, 'init', 'a.tsx')]),
   join(paths.absTmpDirPath, 'init', 'b.tsx')])
+])
 ```
 
 ## Options
