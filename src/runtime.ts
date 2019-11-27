@@ -1,7 +1,10 @@
 import React from 'react';
-// @ts-ignore
-import Provider from '@tmp/model/provider';
+import { DIR_NAME_IN_TMP } from './constants';
 
 export function rootContainer(container: React.ReactNode) {
-  return React.createElement(Provider, null, container);
+  return React.createElement(
+    require(`@tmp/${DIR_NAME_IN_TMP}/Provider`).default,
+    null,
+    container
+  );
 }
