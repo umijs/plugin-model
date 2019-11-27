@@ -2,16 +2,36 @@ import path from 'path';
 import { EOL } from 'os';
 import { readFileSync } from 'fs';
 
-const getName = (absPath: string) => {
+export type ModelItem = { absPath: string, namespace: string } | string;
+
+export const getName = (absPath: string) => {
   return path.basename(absPath, path.extname(absPath));
 }
-const getPath = (absPath: string) => {
+export const getPath = (absPath: string) => {
   const info = path.parse(absPath);
   return path.join(info.dir, info.name);
 }
 
 export const genImports = (imports: string[]) => {
   return imports.map(ele => (`import ${getName(ele)} from '${getPath(ele)}';`)).join(EOL);
+}
+
+export const genExtraModels = (models: ModelItem[] = []) => {
+  return models.map(ele => {
+    if(typeof ele === 'string') {
+      return {
+        importPath: getPath(ele),
+        importName: getName(ele),
+        namespace: getName(ele),
+      }
+    } else {
+      return {
+        importPath: getPath(ele.absPath),
+        importName: getName(ele.absPath),
+        namespace: ele.namespace
+      }
+    }
+  });
 }
 
 type HookItem = { namespace: string, use: string[]};
