@@ -65,7 +65,7 @@ export default ({ children }: { children: React.ReactNode }) => {
     <UmiContext.Provider value={dispatcher}>
       {
         Object.entries(models).map(pair => (
-          <Exe key={pair[0]} hook={pair[1] as any} onUpdate={(val: any) => {
+          <Exe key={pair[0]} namespace={pair[0]} hook={pair[1] as any} onUpdate={(val: any) => {
             const [ns] = pair as [keyof typeof models, any];
             dispatcher.data[ns] = val;
             dispatcher.update(ns);

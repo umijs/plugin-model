@@ -1,9 +1,9 @@
 export default class Dispatcher {
   callbacks = {};
   data = {};
-  update = (namespace) => {
+  update = (namespace: string) => {
     (this.callbacks[namespace] || [])
-    .forEach((callback) => {
+    .forEach((callback: (val: any) => void) => {
       try {
         const data = this.data[namespace];
         callback(data);
