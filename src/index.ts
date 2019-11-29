@@ -6,28 +6,36 @@ import getUseModelContent from './utils/getUseModelContent';
 
 export default (api: IApi) => {
   const { paths, config } = api;
-  const modelsPath = join(paths.absSrcPath, config.singular ? 'model' : 'models');
+
+  function getModelsPath() {
+    return join(paths.absSrcPath, config.singular ? 'model' : 'models');
+  }
 
   // Add provider wrapper with rootContainer
   api.addRuntimePlugin(join(__dirname, './runtime'));
 
   api.onGenerateFiles(() => {
+    const modelsPath = getModelsPath();
     try {
       const additionalModels = api.applyPlugins('addExtraModels', {
         initialValue: [],
       });
       // Write models/provider.tsx
-      api.writeTmpFile(`${DIR_NAME_IN_TMP}/Provider.tsx`, getProviderContent(modelsPath, additionalModels));
+      api.writeTmpFile(
+        `${DIR_NAME_IN_TMP}/Provider.tsx`,
+        getProviderContent(modelsPath, additionalModels),
+      );
       // Write models/useModel.tsx
       api.writeTmpFile(`${DIR_NAME_IN_TMP}/useModel.tsx`, getUseModelContent());
-    } catch(e) {
+    } catch (e) {
       api.log.error(e);
     }
   });
 
-  api.addPageWatcher([
-    modelsPath,
-  ]);
+  api.addPageWatcher(() => {
+    const modelsPath = getModelsPath();
+    return [modelsPath];
+  });
 
   // Export useModel and Models from umi
   api.addUmiExports([
