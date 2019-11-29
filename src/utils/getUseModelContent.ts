@@ -4,7 +4,7 @@ export default function () {
   return `
 import { useState, useEffect, useContext } from 'react';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
-import { Model } from './provider';
+import { Model } from './Provider';
 
 export const useModel = <T extends keyof Model<T>>(namespace: T) : Model<T>[T] => {
   const dispatcher = useContext<any>(UmiContext);
