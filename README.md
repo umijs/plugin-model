@@ -27,10 +27,15 @@ export default {
 }
 ```
 
-register models in other plugins,
+## Options
+
+## Register extra models
+
+Add extra models from other plugins,
 
 ```js
 // use custom namespace
+// @@ is used for internal models
 api.register('addExtraModels', () => [
   {
     absPath: join(paths.absTmpDirPath, 'init', 'user.tsx'),
@@ -48,8 +53,6 @@ api.register('addExtraModels', () => [
   join(paths.absTmpDirPath, 'init', 'b.tsx')])
 ])
 ```
-
-## Options
 
 ## LICENSE
 

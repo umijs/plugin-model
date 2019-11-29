@@ -2,7 +2,7 @@ import { join } from 'path';
 import { IApi } from 'umi-types';
 import { DIR_NAME_IN_TMP } from './constants';
 import getProviderContent from './utils/getProviderContent';
-import getUserModelContent from './utils/getUserModelContent';
+import getUseModelContent from './utils/getUseModelContent';
 
 export default (api: IApi) => {
   const { paths, config } = api;
@@ -26,7 +26,7 @@ export default (api: IApi) => {
         getProviderContent(modelsPath, additionalModels),
       );
       // Write models/useModel.tsx
-      api.writeTmpFile(`${DIR_NAME_IN_TMP}/useModel.tsx`, getUserModelContent());
+      api.writeTmpFile(`${DIR_NAME_IN_TMP}/useModel.tsx`, getUseModelContent());
     } catch (e) {
       api.log.error(e);
     }
