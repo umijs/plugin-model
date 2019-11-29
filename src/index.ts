@@ -34,7 +34,6 @@ export default (api: IApi) => {
 
   api.addPageWatcher(() => {
     const modelsPath = getModelsPath();
-    console.log('modelsPath', modelsPath);
     return [modelsPath];
   });
 
