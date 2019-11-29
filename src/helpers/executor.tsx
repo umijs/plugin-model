@@ -8,10 +8,10 @@ interface ExecutorProps {
 
 export default (props: ExecutorProps) => {
   const { hook, onUpdate, namespace } = props;
-  try{
+  try {
     const data = hook();
     onUpdate(data);
-  } catch(e) {
+  } catch (e) {
     console.error(`plugin-model: Invoking '${namespace || 'unknown'}' model failed:`, e);
   }
 

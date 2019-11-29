@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-export default function () {
+export default function() {
   return `
 import { useState, useEffect, useContext } from 'react';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';

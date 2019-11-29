@@ -4,9 +4,10 @@ import { EOL } from 'os';
 import { genImports, genModels, genExtraModels, ModelItem } from './index';
 
 function getFiles(cwd: string) {
-  return globby.sync('./**/*.{ts,tsx,js,jsx}', {
-    cwd
-  })
+  return globby
+    .sync('./**/*.{ts,tsx,js,jsx}', {
+      cwd,
+    })
     .filter(
       (file: string) =>
         !file.endsWith('.d.ts') &&
@@ -22,17 +23,19 @@ function getModels(files: string[]) {
   return sortedModels.map(ele => ele).join(', ');
 }
 
-function getExtraModels(models: ModelItem[] = []){
+function getExtraModels(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
   return extraModels.map(ele => `'${ele.namespace}': ${ele.importName}`).join(', ');
 }
 
-function getExtraImports(models: ModelItem[] = []){
+function getExtraImports(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
-  return extraModels.map(ele => `import ${ele.importName} from '${ele.importPath}';`).join(EOL);
+  return extraModels
+    .map(ele => `import ${ele.importName} from '${ele.importPath}';`)
+    .join(EOL);
 }
 
-export default function (modelsDir: string, extra: ModelItem[] = []) {
+export default function(modelsDir: string, extra: ModelItem[] = []) {
   const files = getFiles(modelsDir).map(file => {
     return join(modelsDir, file);
   });
