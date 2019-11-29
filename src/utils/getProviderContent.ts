@@ -48,7 +48,7 @@ import Dispatcher from '${join(__dirname, '..', 'helpers', 'dispatcher')}';
 import Executor from '${join(__dirname, '..', 'helpers', 'executor')}';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 
-export const models = { ${extraModels ? `${extraModels}, ` : ''} ${models} };
+export const models = { ${extraModels ? `${extraModels}, ` : ''}${models} };
 
 export type Model<T extends keyof typeof models> = {
   [key in keyof typeof models]: ReturnType<typeof models[T]>;
