@@ -21,15 +21,27 @@ Configure in `.umirc.js`,
 
 ```js
 export default {
-  plugins: [
-    ['@umijs/plugin-model', options],
-  ],
-}
+  plugins: [["@umijs/plugin-model", options]]
+};
 ```
 
-## Options
+Then add model file in `src/model(s)`, add use it in your React Component like this:
 
-## Register extra models
+```js
+import React from "react";
+import { useModel } from "umi";
+
+export default () => {
+  const yourModel = useModel("modelfilename");
+  return <>{yourModel.text}</>;
+};
+```
+
+Full example can find in [./example](https://github.com/umijs/plugin-model/tree/master/example)
+
+## Plugin API
+
+### Register extra models
 
 Add extra models from other plugins,
 
