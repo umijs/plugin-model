@@ -4,7 +4,7 @@ import { join } from 'path';
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
 import getProviderContent from "../src/utils/getProviderContent";
-import getUserModelContent from "../src/utils/getUserModelContent";
+import getUseModelContent from "../src/utils/getUseModelContent";
 
 const fixtures = join(__dirname, 'fixtures');
 
@@ -20,7 +20,7 @@ readdirSync(fixtures)
     const fixture = join(fixtures, file);
     const tmpDir = join(fixture, '.umi');
     const providerContent = getProviderContent(join(fixture, 'models'));
-    const useModelContent = getUserModelContent();
+    const useModelContent = getUseModelContent();
     const providerPath = join(tmpDir, 'Provider.tsx');
     if (!existsSync(tmpDir)) {
       mkdirSync(tmpDir);
