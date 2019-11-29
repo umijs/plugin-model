@@ -3,6 +3,7 @@ import { join } from 'path';
 export default function() {
   return `
 import { useState, useEffect, useContext } from 'react';
+//@ts-ignore
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 import { Model } from './Provider';
 
