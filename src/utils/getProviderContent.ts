@@ -47,8 +47,11 @@ export default function(modelsDir: string, extra: ModelItem[] = []) {
   return `import React from 'react';
 ${extraImports}
 ${imports}
+//@ts-ignore
 import Dispatcher from '${join(__dirname, '..', 'helpers', 'dispatcher')}';
+//@ts-ignore
 import Executor from '${join(__dirname, '..', 'helpers', 'executor')}';
+//@ts-ignore
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 
 export const models = { ${extraModels ? `${extraModels}, ` : ''}${models} };
