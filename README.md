@@ -29,8 +29,6 @@ export default {
 
 ### 2. Add model file in `src/models`
 
-e.g.
-
 ```js
 // src/models/count.ts
 import { useState } from 'react';
@@ -45,8 +43,6 @@ export default () => {
 
 ### 3. Use it in your React Component or other models
 
-e.g.
-
 ```js
 import React from 'react';
 import { useModel } from 'umi';
@@ -57,7 +53,7 @@ export default () => {
 };
 ```
 
-Full example can find in [./example](https://github.com/umijs/plugin-model/tree/master/example)
+Full example can find in [./example](https://github.com/umijs/plugin-model/tree/master/example).
 
 ## Plugin API
 
