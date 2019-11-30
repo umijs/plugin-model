@@ -11,9 +11,6 @@
   "authors": [
     "Troy Li <a@tianyi.li>"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.com/"
-  },
   "bugs": {
     "url": "https://github.com/umijs/plugin-model/issues"
   },
