@@ -17,7 +17,9 @@ $ npm install
 
 ## Usage
 
-Configure in `.umirc.js`,
+Getting started in 3 steps.
+
+### 1. Configure in `.umirc.js`
 
 ```js
 export default {
@@ -25,15 +27,33 @@ export default {
 };
 ```
 
-Then add model file in `src/model(s)`, add use it in your React Component like this:
+### 2. Add model file in `src/models`
+
+e.g.
+
+```js
+// src/models/count.ts
+import { useState } from 'react';
+
+export default () => {
+  const [ count, setCount ] = useState(0);
+  const increment = () => setCount(c => c + 1);
+  const decrement = () => setCount(c => c - 1);
+  return { count, increment, decrement };
+}
+```
+
+### 3. Use it in your React Component or other models
+
+e.g.
 
 ```js
 import React from 'react';
 import { useModel } from 'umi';
 
 export default () => {
-  const yourModel = useModel('modelfilename');
-  return <>{yourModel.text}</>;
+  const { count } = useModel('count');
+  return <>{ count }</>;
 };
 ```
 
@@ -43,7 +63,7 @@ Full example can find in [./example](https://github.com/umijs/plugin-model/tree/
 
 ### Register extra models
 
-Add extra models from other plugins
+Add extra models in plugins.
 
 ```js
 // use custom namespace
@@ -57,13 +77,13 @@ api.register('addExtraModels', () => [
     absPath: join(paths.absTmpDirPath, 'init', 'access.tsx'),
     namespace: '@@access',
   },
-])
+]);
 
 // use default namespace
 api.register('addExtraModels', () => [
-  join(paths.absTmpDirPath, 'init', 'a.tsx')]),
-  join(paths.absTmpDirPath, 'init', 'b.tsx')])
-])
+  join(paths.absTmpDirPath, 'init', 'a.tsx'),
+  join(paths.absTmpDirPath, 'init', 'b.tsx'),
+]);
 ```
 
 ## LICENSE
