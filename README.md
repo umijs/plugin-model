@@ -12,7 +12,7 @@ Data flow solution based on hooks and umi plugin.
 
 ```bash
 # or yarn
-$ npm install
+$ npm install @umijs/plugin-model --save
 ```
 
 ## Usage
