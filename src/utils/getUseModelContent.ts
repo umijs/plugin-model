@@ -1,7 +1,5 @@
 import { join } from 'path';
 
-const nnew = '';
-
 export default function() {
   return `import { useState, useEffect, useContext, useRef } from 'react';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
