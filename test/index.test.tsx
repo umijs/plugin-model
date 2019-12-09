@@ -34,7 +34,7 @@ readdirSync(fixtures)
       const renderRet = render(
         <Provider><App /></Provider>
       );
-      await require(join(fixture, 'test.ts')).default({
+      await require(join(fixture, 'test.js')).default({
         ...renderRet,
         fireEvent,
         delay,
