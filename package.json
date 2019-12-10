@@ -41,6 +41,7 @@
     "src"
   ],
   "dependencies": {
-    "globby": "7.1.1"
+    "globby": "7.1.1",
+    "lodash.isequal": "^4.5.0"
   }
 }

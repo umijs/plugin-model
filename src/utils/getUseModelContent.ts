@@ -1,20 +1,37 @@
 import { join } from 'path';
 
 export default function() {
-  return `
-import { useState, useEffect, useContext } from 'react';
-//@ts-ignore
+  return `import { useState, useEffect, useContext, useRef } from 'react';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
-import { Model } from './Provider';
+import { Model } from './provider';
+import { isEqual } from 'lodash';
 
-export const useModel = <T extends keyof Model<T>>(namespace: T) : Model<T>[T] => {
+export function useModel<T extends keyof Model<T>>(model: T): Model<T>[T]
+export function useModel<T extends keyof Model<T>, U>(model: T, selector: (model: Model<T>[T]) => U): U
+
+export function useModel<T extends keyof Model<T>, U>(
+  namespace: T, 
+  updater?: (model: Model<T>[T]) => U
+) : typeof updater extends undefined ? Model<T>[T] : ReturnType<NonNullable<typeof updater>>{
+
+  type RetState = typeof updater extends undefined ? Model<T>[T] : ReturnType<NonNullable<typeof updater>>
   const dispatcher = useContext<any>(UmiContext);
-  const [state, setState] = useState<Model<T>[T]>(
-    () => dispatcher.data![namespace] as Model<T>[T]
+  const updaterRef = useRef(updater);
+  updaterRef.current = updater;
+  const [state, setState] = useState<RetState>(
+    () => updaterRef.current ? updaterRef.current(dispatcher.data![namespace]) : dispatcher.data![namespace]
   );
+
   useEffect(() => {
     const handler = (e: any) => {
-      setState(e);
+      if(updater && updaterRef.current){
+        const ret = updaterRef.current(e);
+        if(!isEqual(ret, state)){
+          setState(ret);
+        }
+      } else {
+        setState(e);
+      }
     }
     try {
       dispatcher.callbacks![namespace]!.add(handler);
@@ -26,7 +43,7 @@ export const useModel = <T extends keyof Model<T>>(namespace: T) : Model<T>[T] =
       dispatcher.callbacks![namespace]!.delete(handler);
     }
   }, [namespace])
-  return state!;
+  return state;
 };
 `;
 }
