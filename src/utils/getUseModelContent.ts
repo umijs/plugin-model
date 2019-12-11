@@ -2,7 +2,7 @@ import { join } from 'path';
 
 export default function() {
   return `import { useState, useEffect, useContext, useRef } from 'react';
-import isEqual from 'lodash.isequal';
+import isEqual from '${require.resolve('lodash.isequal')}';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 import { Model } from './provider';
 
