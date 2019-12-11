@@ -31,13 +31,19 @@ readdirSync(fixtures)
     test(file, async () => {
       const Provider = require(providerPath).default;
       const App = require(join(fixture, 'index.tsx')).default;
+      const context = {
+        updateCount: 0,
+      };
       const renderRet = render(
-        <Provider><App /></Provider>
+        <Provider><App onUpdate={() => {
+          context.updateCount += 1;
+        }} /></Provider>
       );
       await require(join(fixture, 'test.js')).default({
         ...renderRet,
         fireEvent,
         delay,
+        context,
       });
     });
   });
