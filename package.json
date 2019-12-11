@@ -1,6 +1,6 @@
 {
   "name": "@umijs/plugin-model",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Data flow solution based on hooks and umi plugin.",
   "license": "MIT",
   "repository": {
