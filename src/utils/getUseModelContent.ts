@@ -2,9 +2,9 @@ import { join } from 'path';
 
 export default function() {
   return `import { useState, useEffect, useContext, useRef } from 'react';
+import isEqual from 'lodash.isequal';
 import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
 import { Model } from './provider';
-import { isEqual } from 'lodash';
 
 export function useModel<T extends keyof Model<T>>(model: T): Model<T>[T]
 export function useModel<T extends keyof Model<T>, U>(model: T, selector: (model: Model<T>[T]) => U): U
@@ -42,7 +42,8 @@ export function useModel<T extends keyof Model<T>, U>(
     return () => {
       dispatcher.callbacks![namespace]!.delete(handler);
     }
-  }, [namespace])
+  }, [namespace]);
+
   return state;
 };
 `;
