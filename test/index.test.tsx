@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
-import getProviderContent from "../src/utils/getProviderContent";
-import getUseModelContent from "../src/utils/getUseModelContent";
+import getProviderContent from '../src/utils/getProviderContent';
+import getUseModelContent from '../src/utils/getUseModelContent';
 
 const fixtures = join(__dirname, 'fixtures');
 
@@ -12,14 +12,24 @@ const delay = (ms: number) => {
   return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
-}
+};
+
+const extraModelConfig = {
+  extraModel: [
+    {
+      absPath: join(fixtures, 'extraModel/extra/initialState.js'),
+      namespace: '@@initialState',
+    },
+  ],
+};
 
 readdirSync(fixtures)
   .filter(file => file.charAt(0) !== '.')
   .forEach(file => {
     const fixture = join(fixtures, file);
     const tmpDir = join(fixture, '.umi');
-    const providerContent = getProviderContent(join(fixture, 'models'));
+    const extraModel = extraModelConfig[file];
+    const providerContent = getProviderContent(join(fixture, 'models'), extraModel);
     const useModelContent = getUseModelContent();
     const providerPath = join(tmpDir, 'Provider.tsx');
     if (!existsSync(tmpDir)) {
@@ -35,9 +45,13 @@ readdirSync(fixtures)
         updateCount: 0,
       };
       const renderRet = render(
-        <Provider><App onUpdate={() => {
-          context.updateCount += 1;
-        }} /></Provider>
+        <Provider>
+          <App
+            onUpdate={() => {
+              context.updateCount += 1;
+            }}
+          />
+        </Provider>,
       );
       await require(join(fixture, 'test.js')).default({
         ...renderRet,
