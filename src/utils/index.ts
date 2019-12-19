@@ -68,6 +68,7 @@ export const genModels = (imports: string[]) => {
     namespace: getName(absPath),
     content: readFileSync(absPath).toString(),
   }));
+  const allUserModel = imports.map(getName);
 
   const checkDuplicates = (list: string[]) => {
     return new Set(list).size !== list.length;
@@ -94,7 +95,9 @@ export const genModels = (imports: string[]) => {
               return contents.findIndex(ele => ele.namespace === name) ? name : undefined;
             }
           })
-          .filter(ele => !!ele) as string[];
+          .filter(ele => {
+            return !!ele && allUserModel.includes(getName(ele));
+          }) as string[];
       }
       return { namespace: ele.namespace, use };
     }),
@@ -103,6 +106,5 @@ export const genModels = (imports: string[]) => {
   if (checkDuplicates(contents.map(ele => ele.namespace))) {
     throw Error('umi: models 中包含重复的 namespace！');
   }
-
   return models;
 };
