@@ -41,6 +41,8 @@
     "src"
   ],
   "dependencies": {
+    "@babel/parser": "^7.7.7",
+    "@babel/traverse": "^7.7.4",
     "globby": "7.1.1",
     "lodash.isequal": "^4.5.0"
   }
