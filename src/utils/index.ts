@@ -91,7 +91,9 @@ export const genModels = (imports: string[]) => {
             try {
               // string literal
               const ns = (path.parentPath.node as any).arguments[0].value;
-              use.push(ns);
+              if(allUserModel.includes(ns)){
+                use.push(ns);
+              }
             } catch(e) {};
           }
         }
