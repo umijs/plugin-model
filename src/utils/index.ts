@@ -1,6 +1,8 @@
 import path from 'path';
 import { EOL } from 'os';
 import { readFileSync } from 'fs';
+import { parse } from '@babel/parser';
+import traverse from '@babel/traverse';
 
 export type ModelItem = { absPath: string; namespace: string } | string;
 
@@ -36,11 +38,30 @@ export const genExtraModels = (models: ModelItem[] = []) => {
 
 type HookItem = { namespace: string; use: string[] };
 
-const sort = (ns: HookItem[]) => {
+export const sort = (ns: HookItem[]) => {
   let final: string[] = [];
-  ns.forEach(item => {
+  ns.forEach((item, index) => {
     if (item.use && item.use.length) {
       const itemGroup = [...item.use, item.namespace];
+
+      const cannotUse = [item.namespace];
+      for(let i = 0; i <= index; i++ ) {
+        if(ns[i].use.filter(v => cannotUse.includes(v)).length) {
+          if(cannotUse.includes(ns[i].namespace)) {
+            continue;
+          } else {
+            cannotUse.push(ns[i].namespace);
+            i = -1;
+            continue;
+          }
+        }
+      }
+
+      const errorList = item.use.filter(v => cannotUse.includes(v));
+      if (errorList.length) {
+        throw Error(`Circular dependencies: ${item.namespace} can't use ${errorList.join(', ')}`);
+      }
+
       const intersection = final.filter(v => itemGroup.includes(v));
       if (intersection.length) {
         // first intersection
@@ -76,29 +97,27 @@ export const genModels = (imports: string[]) => {
 
   const models = sort(
     contents.map(ele => {
-      // const use: string[] = [];
-      // 兼容 node8，不要用 lookahead
-      // const useModelRegex = /(?<=useModel\()[^)]*(?=\))/;
-      const useModelRegex = /(useModel\(.*?\))/gs;
-      const allModels = ele.content.match(useModelRegex);
+      const ast = parse(ele.content, {
+        sourceType: "module",
+        plugins: ["jsx", "typescript"]
+      });
+
       let use: string[] = [];
-      if (allModels) {
-        use = allModels!
-          .map(ele => {
-            const lastQuote = ele.lastIndexOf("'");
-            const lastDoubleQuote = ele.lastIndexOf('"');
-            if (lastDoubleQuote > lastQuote) {
-              const name = ele.slice(ele.indexOf('"') + 1, lastDoubleQuote);
-              return contents.findIndex(ele => ele.namespace === name) ? name : undefined;
-            } else {
-              const name = ele.slice(ele.indexOf("'") + 1, lastQuote);
-              return contents.findIndex(ele => ele.namespace === name) ? name : undefined;
-            }
-          })
-          .filter(ele => {
-            return !!ele && allUserModel.includes(getName(ele));
-          }) as string[];
-      }
+
+      traverse(ast, {
+        enter(path) {
+          if (path.isIdentifier({ name: 'useModel' })) {
+            try {
+              // string literal
+              const ns = (path.parentPath.node as any).arguments[0].value;
+              if(allUserModel.includes(ns)){
+                use.push(ns);
+              }
+            } catch(e) {};
+          }
+        }
+      });
+      
       return { namespace: ele.namespace, use };
     }),
   );
