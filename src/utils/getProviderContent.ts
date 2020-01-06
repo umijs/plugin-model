@@ -37,8 +37,13 @@ function getExtraImports(models: ModelItem[] = []) {
 
 export default function(modelsDir: string, extra: ModelItem[] = []) {
   const files = getFiles(modelsDir).map(file => {
-    return join(modelsDir, file);
-  });
+    const path = join(modelsDir, file);
+    const hook = require(path).default;
+    if(typeof hook === 'function'){
+      return path;
+    }
+    return '';
+  }).filter(ele => !!ele) as string[];
   const imports = genImports(files);
   const userModels = getModels(files);
   const extraModels = getExtraModels(extra);
