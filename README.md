@@ -34,11 +34,11 @@ export default {
 import { useState } from 'react';
 
 export default () => {
-  const [ count, setCount ] = useState(0);
+  const [count, setCount] = useState(0);
   const increment = () => setCount(c => c + 1);
   const decrement = () => setCount(c => c - 1);
   return { count, increment, decrement };
-}
+};
 ```
 
 ### 3. Use it in your React Component or other models
@@ -49,7 +49,7 @@ import { useModel } from 'umi';
 
 export default () => {
   const { count } = useModel('count');
-  return <>{ count }</>;
+  return <>{count}</>;
 };
 ```
 

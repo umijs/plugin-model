@@ -45,9 +45,9 @@ export const sort = (ns: HookItem[]) => {
       const itemGroup = [...item.use, item.namespace];
 
       const cannotUse = [item.namespace];
-      for(let i = 0; i <= index; i++ ) {
-        if(ns[i].use.filter(v => cannotUse.includes(v)).length) {
-          if(cannotUse.includes(ns[i].namespace)) {
+      for (let i = 0; i <= index; i++) {
+        if (ns[i].use.filter(v => cannotUse.includes(v)).length) {
+          if (cannotUse.includes(ns[i].namespace)) {
             continue;
           } else {
             cannotUse.push(ns[i].namespace);
@@ -59,7 +59,9 @@ export const sort = (ns: HookItem[]) => {
 
       const errorList = item.use.filter(v => cannotUse.includes(v));
       if (errorList.length) {
-        throw Error(`Circular dependencies: ${item.namespace} can't use ${errorList.join(', ')}`);
+        throw Error(
+          `Circular dependencies: ${item.namespace} can't use ${errorList.join(', ')}`,
+        );
       }
 
       const intersection = final.filter(v => itemGroup.includes(v));
@@ -98,8 +100,8 @@ export const genModels = (imports: string[]) => {
   const models = sort(
     contents.map(ele => {
       const ast = parse(ele.content, {
-        sourceType: "module",
-        plugins: ["jsx", "typescript"]
+        sourceType: 'module',
+        plugins: ['jsx', 'typescript'],
       });
 
       let use: string[] = [];
@@ -110,14 +112,14 @@ export const genModels = (imports: string[]) => {
             try {
               // string literal
               const ns = (path.parentPath.node as any).arguments[0].value;
-              if(allUserModel.includes(ns)){
+              if (allUserModel.includes(ns)) {
                 use.push(ns);
               }
-            } catch(e) {};
+            } catch (e) {}
           }
-        }
+        },
       });
-      
+
       return { namespace: ele.namespace, use };
     }),
   );
