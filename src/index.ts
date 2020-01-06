@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { IApi } from 'umi-types';
+import { winPath } from 'umi-utils';
 import { DIR_NAME_IN_TMP } from './constants';
 import getProviderContent from './utils/getProviderContent';
 import getUseModelContent from './utils/getUseModelContent';
@@ -12,7 +13,7 @@ export default (api: IApi) => {
   }
 
   // Add provider wrapper with rootContainer
-  api.addRuntimePlugin(join(__dirname, './runtime'));
+  api.addRuntimePlugin(join(winPath(__dirname), './runtime'));
 
   api.onGenerateFiles(() => {
     const modelsPath = getModelsPath();
