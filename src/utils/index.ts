@@ -11,7 +11,7 @@ export const getName = (absPath: string) => {
 };
 export const getPath = (absPath: string) => {
   const info = path.parse(absPath);
-  return path.join(info.dir, info.name);
+  return path.join(info.dir, info.name).replace(/'/, '\\\'');
 };
 
 export const genImports = (imports: string[]) => {

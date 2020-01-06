@@ -20,7 +20,7 @@ function getFiles(cwd: string) {
 
 function getModels(files: string[]) {
   const sortedModels = genModels(files);
-  return sortedModels.map(ele => (`'${ele.namespace}': ${ele.importName}`)).join(', ');
+  return sortedModels.map(ele => (`'${ele.namespace.replace(/\'/g, '\\\'')}': ${ele.importName}`)).join(', ');
 }
 
 function getExtraModels(models: ModelItem[] = []) {
@@ -31,7 +31,7 @@ function getExtraModels(models: ModelItem[] = []) {
 function getExtraImports(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
   return extraModels
-    .map(ele => `import ${ele.importName} from '${ele.importPath}';`)
+    .map(ele => `import ${ele.importName} from '${ele.importPath.replace(/\'/g, '\\\'')}';`)
     .join(EOL);
 }
 
