@@ -21,10 +21,5 @@
       "@tmp/*": ["./pages/.umi/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-    "script"
-  ]
+  "exclude": ["node_modules", "build", "dist", "script"]
 }

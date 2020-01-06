@@ -17,10 +17,5 @@
     "experimentalDecorators": true,
     "strict": true
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-    "script"
-  ]
+  "exclude": ["node_modules", "build", "dist", "script"]
 }

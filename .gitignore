@@ -8,3 +8,5 @@
 .umi
 .umi-production
 node_modules
+yarn-error.log
+.eslintcache
