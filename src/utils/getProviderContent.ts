@@ -27,13 +27,15 @@ function getModels(files: string[]) {
 
 function getExtraModels(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
-  return extraModels.map(ele => `'${ele.namespace}': ${ele.importName}`).join(', ');
+  return extraModels
+    .map(ele => `'${ele.namespace}': ${winPath(ele.importName)}`)
+    .join(', ');
 }
 
 function getExtraImports(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
   return extraModels
-    .map(ele => `import ${ele.importName} from '${ele.importPath}';`)
+    .map(ele => `import ${ele.importName} from '${winPath(ele.importPath)}';`)
     .join(EOL);
 }
 
