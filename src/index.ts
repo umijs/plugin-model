@@ -1,4 +1,6 @@
 import { join } from 'path';
+// need get a  index.js
+// eslint-disable-next-line import/no-unresolved
 import { IApi } from 'umi-types';
 import { winPath } from 'umi-utils';
 import { DIR_NAME_IN_TMP } from './constants';

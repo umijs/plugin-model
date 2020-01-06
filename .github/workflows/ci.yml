@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
       - run: yarn
+      - run: yarn lint
       - run: yarn build
       - run: yarn test --forceExit
         env:
