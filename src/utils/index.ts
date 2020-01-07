@@ -3,6 +3,7 @@ import { EOL } from 'os';
 import { readFileSync } from 'fs';
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
+import { Identifier, ArrowFunctionExpression } from '@babel/types';
 
 export type ModelItem = { absPath: string; namespace: string } | string;
 
@@ -129,3 +130,56 @@ export const genModels = (imports: string[]) => {
   }
   return raw.sort((a,b) => models.indexOf(a.namespace) - models.indexOf(b.namespace));
 };
+
+export const getValidFiles = (files: string[], modelsDir: string) => {
+  return files.map(file => {
+    const filePath = path.join(modelsDir, file);
+    const ast = parse(readFileSync(filePath, { encoding: 'utf-8'}).toString(), {
+      sourceType: "module",
+      plugins: ["jsx", "typescript"]
+    });
+    let isValidHook = false;
+    let identifierName = '';
+    traverse(ast, {
+      enter(path) {
+        if (path.isExportDefaultDeclaration()) {
+          const { type } = path.node.declaration;
+          try {
+            if(
+              type === 'ArrowFunctionExpression' ||
+              type === 'FunctionDeclaration'
+            ) {
+              isValidHook = true;
+            } else if ( type === 'Identifier' ) {
+              identifierName = (path.node.declaration as Identifier).name;
+            }
+          } catch(e) {};
+        }
+      }
+    });
+
+    try{
+      if(identifierName) {
+        ast.program.body.forEach(ele => {
+          if(ele.type === 'FunctionDeclaration') {
+            if(ele.id?.name === identifierName) {
+              isValidHook = true;
+            }
+          }
+          if(ele.type === 'VariableDeclaration') {
+            if((ele.declarations[0].id as Identifier).name === identifierName &&
+              (ele.declarations[0].init as ArrowFunctionExpression).type === 'ArrowFunctionExpression') {
+                isValidHook = true;
+            }
+          }
+        })
+      }
+    } catch(e) {
+      isValidHook = false;
+    }
+    if(isValidHook){
+      return filePath;
+    }
+    return '';
+  }).filter(ele => !!ele) as string[];
+}

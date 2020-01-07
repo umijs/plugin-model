@@ -1,7 +1,7 @@
 import { join } from 'path';
 import globby from 'globby';
 import { EOL } from 'os';
-import { genImports, genModels, genExtraModels, ModelItem } from './index';
+import { genImports, genModels, genExtraModels, ModelItem, getValidFiles } from './index';
 
 function getFiles(cwd: string) {
   return globby
@@ -36,14 +36,7 @@ function getExtraImports(models: ModelItem[] = []) {
 }
 
 export default function(modelsDir: string, extra: ModelItem[] = []) {
-  const files = getFiles(modelsDir).map(file => {
-    const path = join(modelsDir, file);
-    const hook = require(path).default;
-    if(typeof hook === 'function'){
-      return path;
-    }
-    return '';
-  }).filter(ele => !!ele) as string[];
+  const files = getValidFiles(getFiles(modelsDir), modelsDir);
   const imports = genImports(files);
   const userModels = getModels(files);
   const extraModels = getExtraModels(extra);
