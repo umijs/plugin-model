@@ -45,16 +45,15 @@ export default function(modelsDir: string, extra: ModelItem[] = []) {
   const models = getModels(files);
   const extraModels = getExtraModels(extra);
   const extraImports = getExtraImports(extra);
-  const winDirnamePath = winPath(__dirname);
   return `import React from 'react';
 ${extraImports}
 ${imports}
 //@ts-ignore
-import Dispatcher from '${join(winDirnamePath, '..', 'helpers', 'dispatcher')}';
+import Dispatcher from '${winPath(join(__dirname, '..', 'helpers', 'dispatcher'))}';
 //@ts-ignore
-import Executor from '${join(winDirnamePath, '..', 'helpers', 'executor')}';
+import Executor from '${winPath(join(__dirname, '..', 'helpers', 'executor'))}';
 //@ts-ignore
-import { UmiContext } from '${join(winDirnamePath, '..', 'helpers', 'constant')}';
+import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 
 export const models = { ${extraModels ? `${extraModels}, ` : ''}${models} };
 

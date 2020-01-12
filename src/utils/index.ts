@@ -1,6 +1,8 @@
 import path from 'path';
 import { EOL } from 'os';
 import { readFileSync } from 'fs';
+import { winPath } from 'umi-utils';
+
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 
@@ -10,7 +12,7 @@ export const getName = (absPath: string) => path.basename(absPath, path.extname(
 
 export const getPath = (absPath: string) => {
   const info = path.parse(absPath);
-  return path.join(info.dir, info.name);
+  return winPath(path.join(info.dir, info.name));
 };
 
 export const genImports = (imports: string[]) =>

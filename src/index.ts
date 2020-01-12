@@ -44,11 +44,11 @@ export default (api: IApi) => {
   api.addUmiExports([
     {
       specifiers: ['useModel'],
-      source: join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'useModel'),
+      source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'useModel')),
     },
     {
       specifiers: ['Models'],
-      source: join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'Provider'),
+      source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'Provider')),
     },
   ]);
 };

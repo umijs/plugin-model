@@ -3,8 +3,8 @@ import { winPath } from 'umi-utils';
 
 export default function() {
   return `import { useState, useEffect, useContext, useRef } from 'react';
-import isEqual from '${require.resolve('lodash.isequal')}';
-import { UmiContext } from '${join(winPath(__dirname), '..', 'helpers', 'constant')}';
+import isEqual from '${winPath(require.resolve('lodash.isequal'))}';
+import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 import { Model } from './provider';
 
 export function useModel<T extends keyof Model<T>>(model: T): Model<T>[T]
