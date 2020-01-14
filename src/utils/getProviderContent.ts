@@ -56,11 +56,11 @@ export default function(modelsDir: string, extra: ModelItem[] = []) {
 ${extraImports}
 ${imports}
 // @ts-ignore
-import Dispatcher from '${join(__dirname, '..', 'helpers', 'dispatcher')}';
+import Dispatcher from '${winPath(join(__dirname, '..', 'helpers', 'dispatcher'))}';
 // @ts-ignore
-import Executor from '${join(__dirname, '..', 'helpers', 'executor')}';
+import Executor from '${winPath(join(__dirname, '..', 'helpers', 'executor'))}';
 // @ts-ignore
-import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
+import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 
 export const models = { ${extraModels ? `${extraModels}, ` : ''}${userModels} };
 
