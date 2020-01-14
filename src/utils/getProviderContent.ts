@@ -3,7 +3,7 @@ import globby from 'globby';
 import { EOL } from 'os';
 import { winPath } from 'umi-utils';
 
-import { genImports, genModels, genExtraModels, ModelItem } from './index';
+import { genImports, genModels, genExtraModels, ModelItem, getValidFiles } from './index';
 
 function getFiles(cwd: string) {
   return globby
@@ -47,7 +47,7 @@ function getExtraImports(models: ModelItem[] = []) {
 }
 
 export default function(modelsDir: string, extra: ModelItem[] = []) {
-  const files = getFiles(modelsDir).map(file => join(modelsDir, file));
+  const files = getValidFiles(getFiles(modelsDir), modelsDir);
   const imports = genImports(files);
   const userModels = getModels(files);
   const extraModels = getExtraModels(extra);
@@ -55,11 +55,11 @@ export default function(modelsDir: string, extra: ModelItem[] = []) {
   return `import React from 'react';
 ${extraImports}
 ${imports}
-//@ts-ignore
+// @ts-ignore
 import Dispatcher from '${winPath(join(__dirname, '..', 'helpers', 'dispatcher'))}';
-//@ts-ignore
+// @ts-ignore
 import Executor from '${winPath(join(__dirname, '..', 'helpers', 'executor'))}';
-//@ts-ignore
+// @ts-ignore
 import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 
 export const models = { ${extraModels ? `${extraModels}, ` : ''}${userModels} };

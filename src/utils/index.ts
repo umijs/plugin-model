@@ -5,6 +5,7 @@ import { winPath } from 'umi-utils';
 
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
+import { Identifier, ArrowFunctionExpression } from '@babel/types';
 
 export type ModelItem = { absPath: string; namespace: string } | string;
 
@@ -126,3 +127,62 @@ export const genModels = (imports: string[]) => {
   }
   return raw.sort((a, b) => models.indexOf(a.namespace) - models.indexOf(b.namespace));
 };
+
+export const isValidHook = (filePath: string) => {
+  const ast = parse(readFileSync(filePath, { encoding: 'utf-8' }).toString(), {
+    sourceType: "module",
+    plugins: ["jsx", "typescript"]
+  });
+  let valid = false;
+  let identifierName = '';
+  traverse(ast, {
+    enter(p) {
+      if (p.isExportDefaultDeclaration()) {
+        const { type } = p.node.declaration;
+        try {
+          if (
+            type === 'ArrowFunctionExpression' ||
+            type === 'FunctionDeclaration'
+          ) {
+            valid = true;
+          } else if (type === 'Identifier') {
+            identifierName = (p.node.declaration as Identifier).name;
+          }
+        } catch (e) {
+          console.error(e);
+        };
+      }
+    }
+  });
+
+  try {
+    if (identifierName) {
+      ast.program.body.forEach(ele => {
+        if (ele.type === 'FunctionDeclaration') {
+          if (ele.id?.name === identifierName) {
+            valid = true;
+          }
+        }
+        if (ele.type === 'VariableDeclaration') {
+          if ((ele.declarations[0].id as Identifier).name === identifierName &&
+            (ele.declarations[0].init as ArrowFunctionExpression).type === 'ArrowFunctionExpression') {
+            valid = true;
+          }
+        }
+      })
+    }
+  } catch (e) {
+    valid = false;
+  }
+
+  return valid;
+}
+
+export const getValidFiles = (files: string[], modelsDir: string) => files.map(file => {
+  const filePath = path.join(modelsDir, file);
+  const valid = isValidHook(filePath);
+  if (valid) {
+    return filePath;
+  }
+  return '';
+}).filter(ele => !!ele) as string[];

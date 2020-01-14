@@ -3,7 +3,9 @@ import { winPath } from 'umi-utils';
 
 export default function() {
   return `import { useState, useEffect, useContext, useRef } from 'react';
+// @ts-ignore
 import isEqual from '${winPath(require.resolve('lodash.isequal'))}';
+// @ts-ignore
 import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 import { Model } from './provider';
 
