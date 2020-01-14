@@ -1,6 +1,8 @@
 import { join } from 'path';
 import globby from 'globby';
 import { EOL } from 'os';
+import { winPath } from 'umi-utils';
+
 import { genImports, genModels, genExtraModels, ModelItem } from './index';
 
 function getFiles(cwd: string) {
@@ -20,39 +22,45 @@ function getFiles(cwd: string) {
 
 function getModels(files: string[]) {
   const sortedModels = genModels(files);
-  return sortedModels.map(ele => (`'${ele.namespace.replace(/\'/g, '\\\'')}': ${ele.importName}`)).join(', ');
+  return sortedModels
+    .map(ele => `'${ele.namespace.replace(/'/g, "\\'")}': ${ele.importName}`)
+    .join(', ');
 }
 
 function getExtraModels(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
-  return extraModels.map(ele => `'${ele.namespace}': ${ele.importName}`).join(', ');
+  return extraModels
+    .map(ele => `'${ele.namespace}': ${winPath(ele.importName)}`)
+    .join(', ');
 }
 
 function getExtraImports(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
   return extraModels
-    .map(ele => `import ${ele.importName} from '${ele.importPath.replace(/\'/g, '\\\'')}';`)
+    .map(
+      ele =>
+        `import ${ele.importName} from '${winPath(
+          ele.importPath.replace(/'/g, "\\'"),
+        )}';`,
+    )
     .join(EOL);
 }
 
 export default function(modelsDir: string, extra: ModelItem[] = []) {
-  const files = getFiles(modelsDir).map(file => {
-    return join(modelsDir, file);
-  });
+  const files = getFiles(modelsDir).map(file => join(modelsDir, file));
   const imports = genImports(files);
   const userModels = getModels(files);
   const extraModels = getExtraModels(extra);
   const extraImports = getExtraImports(extra);
-
   return `import React from 'react';
 ${extraImports}
 ${imports}
 //@ts-ignore
-import Dispatcher from '${join(__dirname, '..', 'helpers', 'dispatcher')}';
+import Dispatcher from '${winPath(join(__dirname, '..', 'helpers', 'dispatcher'))}';
 //@ts-ignore
-import Executor from '${join(__dirname, '..', 'helpers', 'executor')}';
+import Executor from '${winPath(join(__dirname, '..', 'helpers', 'executor'))}';
 //@ts-ignore
-import { UmiContext } from '${join(__dirname, '..', 'helpers', 'constant')}';
+import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 
 export const models = { ${extraModels ? `${extraModels}, ` : ''}${userModels} };
 

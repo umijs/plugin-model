@@ -1,18 +1,21 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import React from 'react';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { winPath } from 'umi-utils';
+
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
 import getProviderContent from '../src/utils/getProviderContent';
 import getUseModelContent from '../src/utils/getUseModelContent';
 
-const fixtures = join(__dirname, 'fixtures');
+const fixtures = join(winPath(__dirname), 'fixtures');
 
-const delay = (ms: number) => {
-  return new Promise(resolve => {
+const delay = (ms: number) =>
+  new Promise(resolve => {
     setTimeout(resolve, ms);
   });
-};
 
 const extraModelConfig = {
   extraModel: [
