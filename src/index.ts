@@ -1,5 +1,8 @@
 import { join } from 'path';
+// need get a  index.js
+// eslint-disable-next-line import/no-unresolved
 import { IApi } from 'umi-types';
+import { winPath } from 'umi-utils';
 import { DIR_NAME_IN_TMP } from './constants';
 import getProviderContent from './utils/getProviderContent';
 import getUseModelContent from './utils/getUseModelContent';
@@ -12,7 +15,7 @@ export default (api: IApi) => {
   }
 
   // Add provider wrapper with rootContainer
-  api.addRuntimePlugin(join(__dirname, './runtime'));
+  api.addRuntimePlugin(join(winPath(__dirname), './runtime'));
 
   api.onGenerateFiles(() => {
     const modelsPath = getModelsPath();
@@ -41,11 +44,11 @@ export default (api: IApi) => {
   api.addUmiExports([
     {
       specifiers: ['useModel'],
-      source: join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'useModel'),
+      source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'useModel')),
     },
     {
       specifiers: ['Models'],
-      source: join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'Provider'),
+      source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'Provider')),
     },
   ]);
 };
