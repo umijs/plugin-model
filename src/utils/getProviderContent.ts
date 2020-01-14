@@ -21,8 +21,10 @@ function getFiles(cwd: string) {
 }
 
 function getModels(files: string[]) {
-  const sortedModels: string[] = genModels(files);
-  return sortedModels.map(ele => ele).join(', ');
+  const sortedModels = genModels(files);
+  return sortedModels
+    .map(ele => `'${ele.namespace.replace(/'/g, "\\'")}': ${ele.importName}`)
+    .join(', ');
 }
 
 function getExtraModels(models: ModelItem[] = []) {
@@ -35,14 +37,19 @@ function getExtraModels(models: ModelItem[] = []) {
 function getExtraImports(models: ModelItem[] = []) {
   const extraModels = genExtraModels(models);
   return extraModels
-    .map(ele => `import ${ele.importName} from '${winPath(ele.importPath)}';`)
+    .map(
+      ele =>
+        `import ${ele.importName} from '${winPath(
+          ele.importPath.replace(/'/g, "\\'"),
+        )}';`,
+    )
     .join(EOL);
 }
 
 export default function(modelsDir: string, extra: ModelItem[] = []) {
   const files = getFiles(modelsDir).map(file => join(modelsDir, file));
   const imports = genImports(files);
-  const models = getModels(files);
+  const userModels = getModels(files);
   const extraModels = getExtraModels(extra);
   const extraImports = getExtraImports(extra);
   return `import React from 'react';
@@ -55,7 +62,7 @@ import Executor from '${winPath(join(__dirname, '..', 'helpers', 'executor'))}';
 //@ts-ignore
 import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 
-export const models = { ${extraModels ? `${extraModels}, ` : ''}${models} };
+export const models = { ${extraModels ? `${extraModels}, ` : ''}${userModels} };
 
 export type Model<T extends keyof typeof models> = {
   [key in keyof typeof models]: ReturnType<typeof models[T]>;

@@ -12,11 +12,13 @@ export const getName = (absPath: string) => path.basename(absPath, path.extname(
 
 export const getPath = (absPath: string) => {
   const info = path.parse(absPath);
-  return winPath(path.join(info.dir, info.name));
+  return winPath(path.join(info.dir, info.name).replace(/'/, "\\'"));
 };
 
 export const genImports = (imports: string[]) =>
-  imports.map(ele => `import ${getName(ele)} from '${getPath(ele)}';`).join(EOL);
+  imports
+    .map((ele, index) => `import model${index} from '${winPath(getPath(ele))}';`)
+    .join(EOL);
 
 export const genExtraModels = (models: ModelItem[] = []) =>
   models.map(ele => {
@@ -90,37 +92,37 @@ export const genModels = (imports: string[]) => {
 
   const checkDuplicates = (list: string[]) => new Set(list).size !== list.length;
 
-  const models = sort(
-    contents.map(ele => {
-      const ast = parse(ele.content, {
-        sourceType: 'module',
-        plugins: ['jsx', 'typescript'],
-      });
+  const raw = contents.map((ele, index) => {
+    const ast = parse(ele.content, {
+      sourceType: 'module',
+      plugins: ['jsx', 'typescript'],
+    });
 
-      const use: string[] = [];
+    const use: string[] = [];
 
-      traverse(ast, {
-        enter(astPath) {
-          if (astPath.isIdentifier({ name: 'useModel' })) {
-            try {
-              // string literal
-              const ns = (astPath.parentPath.node as any).arguments[0].value;
-              if (allUserModel.includes(ns)) {
-                use.push(ns);
-              }
-            } catch (e) {
-              // console.log(e)
+    traverse(ast, {
+      enter(astPath) {
+        if (astPath.isIdentifier({ name: 'useModel' })) {
+          try {
+            // string literal
+            const ns = (astPath.parentPath.node as any).arguments[0].value;
+            if (allUserModel.includes(ns)) {
+              use.push(ns);
             }
+          } catch (e) {
+            // console.log(e)
           }
-        },
-      });
+        }
+      },
+    });
 
-      return { namespace: ele.namespace, use };
-    }),
-  );
+    return { namespace: ele.namespace, use, importName: `model${index}` };
+  });
+
+  const models = sort(raw);
 
   if (checkDuplicates(contents.map(ele => ele.namespace))) {
     throw Error('umi: models 中包含重复的 namespace！');
   }
-  return models;
+  return raw.sort((a, b) => models.indexOf(a.namespace) - models.indexOf(b.namespace));
 };
