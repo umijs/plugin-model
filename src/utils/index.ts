@@ -12,12 +12,12 @@ export const getName = (absPath: string) => path.basename(absPath, path.extname(
 
 export const getPath = (absPath: string) => {
   const info = path.parse(absPath);
-  return winPath(path.join(info.dir, info.name).replace(/'/, "\\'"));
+  return winPath(path.join(info.dir, info.name).replace(/'/, "'"));
 };
 
 export const genImports = (imports: string[]) =>
   imports
-    .map((ele, index) => `import model${index} from '${winPath(getPath(ele))}';`)
+    .map((ele, index) => `import model${index} from "${winPath(getPath(ele))}";`)
     .join(EOL);
 
 export const genExtraModels = (models: ModelItem[] = []) =>
