@@ -21,9 +21,10 @@ export function useModel<T extends keyof Model<T>, U>(
   const dispatcher = useContext<any>(UmiContext);
   const updaterRef = useRef(updater);
   updaterRef.current = updater;
-  const getInitialState = () => updaterRef.current ? updaterRef.current(dispatcher.data![namespace]) : dispatcher.data![namespace];
-  const [state, setState] = useState<RetState>(getInitialState);
-  const lastState = useRef<any>(getInitialState());
+  const [state, setState] = useState<RetState>(
+    () => updaterRef.current ? updaterRef.current(dispatcher.data![namespace]) : dispatcher.data![namespace]
+  );
+  const lastState = useRef<any>(state);
 
   useEffect(() => {
     const handler = (e: any) => {
