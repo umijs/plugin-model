@@ -9,8 +9,6 @@ import isEqual from '${winPath(require.resolve('lodash.isequal'))}';
 import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
 import { Model } from './provider';
 
-const USEMODELINIT = Symbol('useModelInit');
-
 export function useModel<T extends keyof Model<T>>(model: T): Model<T>[T]
 export function useModel<T extends keyof Model<T>, U>(model: T, selector: (model: Model<T>[T]) => U): U
 
@@ -23,18 +21,15 @@ export function useModel<T extends keyof Model<T>, U>(
   const dispatcher = useContext<any>(UmiContext);
   const updaterRef = useRef(updater);
   updaterRef.current = updater;
-  const [state, setState] = useState<RetState>(
-    () => updaterRef.current ? updaterRef.current(dispatcher.data![namespace]) : dispatcher.data![namespace]
-  );
-
-  const lastState = useRef<any>(USEMODELINIT);
+  const getInitialState = () => updaterRef.current ? updaterRef.current(dispatcher.data![namespace]) : dispatcher.data![namespace];
+  const [state, setState] = useState<RetState>(getInitialState);
+  const lastState = useRef<any>(getInitialState());
 
   useEffect(() => {
     const handler = (e: any) => {
       if(updater && updaterRef.current){
         const ret = updaterRef.current(e);
-        const realState = lastState.current === USEMODELINIT ? state : lastState.current;
-        if(!isEqual(ret, realState)){
+        if(!isEqual(ret, lastState.current)){
           lastState.current = ret;
           setState(ret);
         }
