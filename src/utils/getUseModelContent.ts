@@ -7,7 +7,9 @@ export default function() {
 import isEqual from '${winPath(require.resolve('lodash.isequal'))}';
 // @ts-ignore
 import { UmiContext } from '${winPath(join(__dirname, '..', 'helpers', 'constant'))}';
-import { Model } from './provider';
+import { Model, models } from './Provider';
+
+export type Models<T extends keyof typeof models> = Model<T>[T]
 
 export function useModel<T extends keyof Model<T>>(model: T): Model<T>[T]
 export function useModel<T extends keyof Model<T>, U>(model: T, selector: (model: Model<T>[T]) => U): U
