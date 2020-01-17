@@ -43,12 +43,8 @@ export default (api: IApi) => {
   // Export useModel and Models from umi
   api.addUmiExports([
     {
-      specifiers: ['useModel'],
+      exportAll: true,
       source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'useModel')),
-    },
-    {
-      specifiers: ['Models'],
-      source: winPath(join(api.paths.absTmpDirPath, DIR_NAME_IN_TMP, 'Provider')),
     },
   ]);
 };
